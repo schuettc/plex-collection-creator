@@ -116,6 +116,82 @@ Want something specific? Use **Custom Search** to ask for anything:
 
 ---
 
+## MCP Server (drive Plex from Claude Code)
+
+In addition to the web app, this project ships an **MCP server** so you can manage
+your Plex library conversationally from an MCP client like
+[Claude Code](https://claude.com/claude-code) — browse libraries, create and edit
+collections, fix bad posters, and verify collection accuracy against TMDB.
+
+The web app is unchanged; the MCP server is a separate entry point (`npm run mcp`)
+that talks to Plex over stdio.
+
+### Configure
+
+The server resolves a Plex connection two ways:
+
+1. **Standalone** — set `PLEX_URL` and `PLEX_TOKEN` (no database or web setup
+   required). [How to find your token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/).
+2. **Reuse the app's connection** — if those env vars are unset, it falls back to
+   the Plex server you already connected in the web UI.
+
+`TMDB_API_KEY` is optional and only needed for the `tmdb_*` accuracy tools
+([free key](https://www.themoviedb.org/settings/api)).
+
+### Add to Claude Code
+
+```jsonc
+// .mcp.json (or ~/.claude.json)
+{
+  "mcpServers": {
+    "plex-collection-creator": {
+      "command": "npm",
+      "args": ["run", "--silent", "mcp"],
+      "cwd": "/path/to/plex-collection-creator",
+      "env": {
+        "PLEX_URL": "http://localhost:32400",
+        "PLEX_TOKEN": "your-plex-token",
+        "TMDB_API_KEY": "your-tmdb-key"
+      }
+    }
+  }
+}
+```
+
+Then ask Claude things like *"group my A24 films into a collection"*, *"audit my
+movie posters and fix any frame-grabs"*, or *"check the Denis Villeneuve
+collection is accurate"*.
+
+### Tools
+
+| Area | Tools |
+| --- | --- |
+| Library | `list_libraries`, `list_items`, `scan_library` |
+| Collections | `list_collections`, `get_collection`, `create_or_update_collection`, `add_to_collection`, `remove_from_collection`, `delete_collection` |
+| Posters | `audit_posters`, `fix_poster`, `fix_all_posters` |
+| TMDB accuracy | `tmdb_search`, `tmdb_movie_details`, `tmdb_director_filmography` |
+
+Collection writes use Plex's tag-based editing — additive (an item keeps its
+other collections) and resilient across Plex server versions. Poster auditing
+flags non-portrait artwork (frame-grabs, banners) by aspect ratio and replaces it
+with the official poster.
+
+### Guided setup with Claude Code
+
+This repo ships **Claude Code skills** (in `.claude/skills/`) so Claude can walk
+you through everything — just ask:
+
+| Skill | What it does |
+| --- | --- |
+| `setup-app` | Install/run the web app, connect Plex, pick libraries, add an AI key |
+| `setup-mcp` | Configure and verify the MCP server in your MCP client |
+| `organize-collections` | Build and curate collections (franchises, directors, themes) |
+| `audit-library` | Verify collection accuracy against TMDB and fix bad posters |
+
+For example: *"set up the MCP server"* or *"audit my movie collections for accuracy"*.
+
+---
+
 ## Getting an AI API Key
 
 | Provider             | How to Get a Key                                                                                           |
