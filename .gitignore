@@ -55,5 +55,6 @@ EPCC_PLAN.md
 epcc-features.json
 epcc-progress.md
 
-# claude plans
-.claude/
+# claude (ignore local settings/plans, but ship the shared skills)
+.claude/*
+!.claude/skills/
