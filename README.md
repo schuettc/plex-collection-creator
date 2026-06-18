@@ -12,6 +12,7 @@
 - **Discovers thematic collections** — "Mind-Bending Thrillers", "90s Classics", "Award Winners"
 - **Custom searches** — Ask for anything: "Find all Christmas movies" or "Movies with twist endings"
 - **One-click apply** — Review suggestions and create collections directly in Plex
+- **Drive it from Claude Code** — an [MCP server](#mcp-server-drive-plex-from-claude-code) lets you manage collections, fix bad posters, and verify collection accuracy against TMDB conversationally
 
 If you need help getting started creating collections in your Plex library, give this a try and let me know what you think.
 
@@ -24,6 +25,10 @@ If you need help getting started creating collections in your Plex library, give
 | **Docker Desktop**    | [Download here](https://www.docker.com/products/docker-desktop/) — free for personal use |
 | **Plex Media Server** | Running on your network                                                                  |
 | **AI API Key**        | From Anthropic, OpenAI, AWS Bedrock, or Google Vertex AI                                 |
+
+> The Quick Start below uses Docker — nothing else to install. For local
+> development or the [MCP server](#mcp-server-drive-plex-from-claude-code) you'll
+> need **Node 22+** (pinned in `.nvmrc`).
 
 ---
 
