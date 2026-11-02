@@ -253,6 +253,16 @@ docker compose up -d
 
 The UI will show "Configured via environment variable" and won't store anything in the database.
 
+To use different Anthropic models, set `ANTHROPIC_MODEL` (main model) and/or
+`ANTHROPIC_FAST_MODEL` (fast model used for deduplication and validation):
+
+```bash
+ANTHROPIC_MODEL=claude-sonnet-5-5
+ANTHROPIC_FAST_MODEL=claude-haiku-5-5
+```
+
+Both apply only to the Anthropic provider. If unset or empty, the built-in defaults are used.
+
 **Option 2: Enter in the UI**
 
 Enter your API key through the setup wizard. It gets encrypted (AES-256-GCM) and stored in the local SQLite database. The encryption key is auto-generated on first startup and stored in the Docker volume.

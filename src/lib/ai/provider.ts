@@ -19,7 +19,7 @@ import { eq } from "drizzle-orm";
  * Fast/cheap model IDs for lightweight tasks (deduplication, etc.)
  */
 const FAST_MODELS: Record<AIProvider, string> = {
-  anthropic: "claude-3-haiku-20240307",
+  anthropic: process.env.ANTHROPIC_FAST_MODEL || "claude-3-haiku-20240307",
   bedrock: "anthropic.claude-3-haiku-20240307-v1:0",
   vertex: "claude-3-haiku@20240307",
   openai: "gpt-4o-mini",
@@ -34,7 +34,9 @@ export function createAIModel(
   modelId?: string
 ) {
   const providerInfo = getProviderInfo(provider);
-  const model = modelId || providerInfo?.defaultModel || "";
+  const envModel =
+    provider === "anthropic" ? process.env.ANTHROPIC_MODEL : undefined;
+  const model = modelId || envModel || providerInfo?.defaultModel || "";
 
   switch (provider) {
     case "anthropic": {
